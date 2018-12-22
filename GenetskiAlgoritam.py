@@ -57,12 +57,14 @@ def nadji(populacija, tip="najgori"):
     najgoriIdx = 0
     if tip == "najgori":
         for i in range(len(populacija)):
-            if populacija[i] > populacija[najgoriIdx]:
+            if populacija[i].getFitnes() < populacija[najgoriIdx].getFitnes():
                 najgoriIdx = i
+        return najgoriIdx
     else:
         for i in range(len(populacija)):
-            if populacija[i] < populacija[najgoriIdx]:
+            if populacija[i].getFitnes() > populacija[najgoriIdx].getFitnes():
                 najgoriIdx = i
+        return najgoriIdx
 
 def GA(roditelji, brIteracija):
     """Genetski algoritam
@@ -91,5 +93,5 @@ def GA(roditelji, brIteracija):
 
         i += 1
 
-    return nadji(roditelji, "najbolji")
+    return roditelji[nadji(roditelji, "najbolji")]
 
