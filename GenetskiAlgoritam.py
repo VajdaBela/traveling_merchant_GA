@@ -19,7 +19,7 @@ class Evoluitivni:
             deca-dvoclana lista koja sadrzi dva potomka"""
         raise NotImplementedError(self.__class__ + ": ukrsti nije implementiran")
 
-    def getFtines(self):
+    def getFitnes(self):
         """koristi se za procenu dobrote jedinke
         input:
             self
@@ -76,7 +76,7 @@ def GA(roditelji, brIteracija):
     i = 0
     while i < brIteracija:
         deca = []
-        for n in range(brPopulacije/2):
+        for n in range(brPopulacije//2):
             otac = izaberiRoditelja(roditelji)
             majka = izaberiRoditelja(roditelji)
             (dete1,dete2) = otac.ukrsti(majka)

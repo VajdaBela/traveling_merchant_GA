@@ -7,7 +7,7 @@ Grad.ucitaljIzFile(file, sviGradovi)
 file.close()
 
 putevi = []
-for i in range(10):
+for i in range(9):
     putevi.append(Put.randPut(list(sviGradovi.values())))
 
 GA(putevi, 2)
