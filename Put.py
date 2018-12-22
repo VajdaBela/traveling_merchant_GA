@@ -10,6 +10,7 @@ class Put(Evoluitivni):
         duzinaPuta-duzina izabranog puta"""
     def __init__(self, gradovi):
         self.gradovi = gradovi.copy()
+        self.gradovi.append(self.gradovi[0])
         self.duzinaPuta = Put.izracunajPut(self.gradovi)
 
     def getFitnes(self):

@@ -46,6 +46,23 @@ def izaberiRoditelja(roditelji):
             return roditelj
     return roditelji[-1]
 
+#Todo istestirati
+def nadji(populacija, tip="najgori"):
+    """pronalazi najgori ili najbolji u populaciji
+    input:
+        populacija-populacija u kom se trazi
+        tip-da trazi najgorag ili najboljeg
+    output:
+        najgoriIdx-index na kom se nalazi trazena jedinka"""
+    najgoriIdx = 0
+    if tip == "najgori":
+        for i in range(len(populacija)):
+            if populacija[i] > populacija[najgoriIdx]:
+                najgoriIdx = i
+    else:
+        for i in range(len(populacija)):
+            if populacija[i] < populacija[najgoriIdx]:
+                najgoriIdx = i
 
 def GA(roditelji, brIteracija):
     """Genetski algoritam
@@ -54,9 +71,25 @@ def GA(roditelji, brIteracija):
         brIteracija-broj generacija koje ce se generisati
     output:
         najbolji-najbolja pronadjena jedinka"""
+    brPopulacije = len(roditelji)
+
     i = 0
     while i < brIteracija:
-        otac = izaberiRoditelja(roditelji)
-        majka = izaberiRoditelja(roditelji)
+        deca = []
+        for n in range(brPopulacije/2):
+            otac = izaberiRoditelja(roditelji)
+            majka = izaberiRoditelja(roditelji)
+            (dete1,dete2) = otac.ukrsti(majka)
+            dete1.mutiraj()
+            dete2.mutiraj()
+            deca.append(dete1)
+            deca.append(dete2)
+        najboljiRoditeljIdx = nadji(roditelji, "najbolji")
+        najgoreDeteIdx = nadji(deca)
+        deca[najgoreDeteIdx] = roditelji[najboljiRoditeljIdx]
+        roditelji = deca
+
         i += 1
+
+    return nadji(roditelji, "najbolji")
 
