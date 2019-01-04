@@ -2,7 +2,7 @@ import random
 
 class Evoluitivni:
     """interface za sve klase koji zele da koriste GA"""
-    def mutiraj(self):
+    def mutiraj(self, curentIter, allIter):
         """koristi se za mutiranje jedinku
         input:
             self
@@ -82,8 +82,8 @@ def GA(roditelji, brIteracija):
             otac = izaberiRoditelja(roditelji)
             majka = izaberiRoditelja(roditelji)
             (dete1,dete2) = otac.ukrsti(majka)
-            dete1.mutiraj()
-            dete2.mutiraj()
+            dete1.mutiraj(i,brIteracija)
+            dete2.mutiraj(i,brIteracija)
             deca.append(dete1)
             deca.append(dete2)
         najboljiRoditeljIdx = nadji(roditelji, "najbolji")
