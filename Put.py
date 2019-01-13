@@ -53,10 +53,10 @@ class Put(Evoluitivni):
         dete1 = []
         dete2 = []
         
-        selfNova = self.gradovi[1:len(self.gradovi)-1]#Izbacujemo prvi i poslednji
-        partnerNova = partner.gradovi[1:len(self.gradovi)-1]#Izbacujemo prvi i poslednji
+        selfNova = self.gradovi[0:-1]#Izbacujemo prvi
+        partnerNova = partner.gradovi[0:-1]#Izbacujemo prvi
         
-        cetvrtina = int(len(selfNova)/4) #Ovo je indeks koji cu kasnije koristitit kako bi uradio ono sto smo pricali sa vukanom.
+        cetvrtina = len(selfNova)//4 #Ovo je indeks koji cu kasnije koristitit kako bi uradio ono sto smo pricali sa vukanom.
 
         
         dete1.extend(selfNova[cetvrtina:len(selfNova)-1-cetvrtina])#Uzimamo pola prvog roditelja i ubacujemo u prvo dete
@@ -64,26 +64,13 @@ class Put(Evoluitivni):
         
         n = len(selfNova)
 
-        k = 0
-        l = 0
         for i in range(n):
             if(partnerNova[i] not in dete1):
                 dete1.append(partnerNova[i])
-                k += 1
-
-
-        for j in range(n):
-            if(selfNova[j] not in dete2):
-                dete2.append(selfNova[j])
-                l += 1
-
-        dete1.insert(0 ,partner.gradovi[0] )
-
-        dete2.insert(0 ,self.gradovi[0] )
-
-        a = Put(dete1), Put(dete2)
+            if(selfNova[i] not in dete2):
+                dete2.append(selfNova[i])
         
-        return ( a)
+        return (Put(dete1), Put(dete2))
 
     def getFitnes(self):
         return 1/self.duzinaPuta

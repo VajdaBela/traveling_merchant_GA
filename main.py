@@ -3,15 +3,11 @@ from  Put import *
 from GenetskiAlgoritam import *
 
 def proveri(p):
-    for i in range(1,len(p.gradovi)):
-        pronadjen = False
-        for j in p.gradovi:
-            if str(i) == j.ime:
-                pronadjen = True
-                break
-        if pronadjen == False:
+    for i in sviGradovi.values():
+        if i not in p.gradovi:
             return False
     return True
+
 
 
 file = open("data_tsp.txt", "r")
@@ -22,13 +18,11 @@ putevi = []
 for i in range(9):
     putevi.append(Put.randPut(list(sviGradovi.values())))
 
-for i in putevi:
-    print(proveri(i))
-
-m = GA(putevi, 1000)
+m = GA(putevi, 10000)
 
 print(m.duzinaPuta)
 
-print(proveri(m))
+for g in m.gradovi:
+    print(g)
 
 print()
