@@ -10,7 +10,8 @@ putevi = []
 for i in range(9):
     putevi.append(Put.randPut(list(sviGradovi.values())))
 
-GA(putevi, 2)
+m = GA(putevi, 100000)
 
+print(m.duzinaPuta)
 
 print()
