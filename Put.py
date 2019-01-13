@@ -53,45 +53,37 @@ class Put(Evoluitivni):
         dete1 = []
         dete2 = []
         
-        self.selfNova = self.gradovi[1:len(self.gradovi)-1]#Izbacujemo prvi i poslednji
-        self.partnerNova = partner.gradovi[1:len(self.gradovi)-1]#Izbacujemo prvi i poslednji
+        selfNova = self.gradovi[1:len(self.gradovi)-1]#Izbacujemo prvi i poslednji
+        partnerNova = partner.gradovi[1:len(self.gradovi)-1]#Izbacujemo prvi i poslednji
         
-        cetvrtina = int(len(self.selfNova)/4) #Ovo je indeks koji cu kasnije koristitit kako bi uradio ono sto smo pricali sa vukanom.
+        cetvrtina = int(len(selfNova)/4) #Ovo je indeks koji cu kasnije koristitit kako bi uradio ono sto smo pricali sa vukanom.
 
         
-        dete1.extend(self.selfNova[cetvrtina:len(self.selfNova)-1-cetvrtina])#Uzimamo pola prvog roditelja i ubacujemo u prvo dete
-        dete2.extend(self.partnerNova[cetvrtina:len(self.partnerNova)-1-cetvrtina])#Uzimamo pola drugog roditelja i ubacujemo u drugo dete
+        dete1.extend(selfNova[cetvrtina:len(selfNova)-1-cetvrtina])#Uzimamo pola prvog roditelja i ubacujemo u prvo dete
+        dete2.extend(partnerNova[cetvrtina:len(partnerNova)-1-cetvrtina])#Uzimamo pola drugog roditelja i ubacujemo u drugo dete
         
-        n = len(self.selfNova)
+        n = len(selfNova)
 
-        try:
-            for i in range(n):
-                if(self.partnerNova[i] not in dete1):
-                    dete1.append(self.partnerNova[i])
-        except IndexError:
-
-            for m in enumerate(self.partnerNova):
-                print(m[0], m[1].ime)
-            g = self.partnerNova[0]
-            if(g not in self.gradovi):
-                print("e")
-            pass
+        k = 0
+        l = 0
+        for i in range(n):
+            if(partnerNova[i] not in dete1):
+                dete1.append(partnerNova[i])
+                k += 1
 
 
         for j in range(n):
-            if(self.selfNova[j] not in dete2):
-                dete2.append(self.selfNova[j])
+            if(selfNova[j] not in dete2):
+                dete2.append(selfNova[j])
+                l += 1
 
-        dete1.append(self.gradovi[len(self.gradovi)-1])
-        dete1.insert(0 ,self.gradovi[0] )
+        dete1.insert(0 ,partner.gradovi[0] )
 
-        dete2.append(self.gradovi[len(self.gradovi)-1])
         dete2.insert(0 ,self.gradovi[0] )
 
-        self.gradovi = dete1
-        partner.gradovi = dete2
+        a = Put(dete1), Put(dete2)
         
-        return ( self, partner)
+        return ( a)
 
     def getFitnes(self):
         return 1/self.duzinaPuta
