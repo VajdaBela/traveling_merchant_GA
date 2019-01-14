@@ -1,5 +1,5 @@
 from GenetskiAlgoritam import Evoluitivni
-from random import shuffle
+from random import shuffle, random
 
 sviGradovi = {}
 
@@ -44,6 +44,9 @@ class Put(Evoluitivni):
         gradoviMutirana.append(self.gradovi[0])#dodaj na kraj grad koji si izbacio
         gradoviMutirana.insert(0 ,self.gradovi[0] )#Dodaj na pocetak grad koji si izbacio
         self.gradovi = gradoviMutirana#Postavi gradove na nove
+
+
+        self.duzinaPuta = Put.izracunajPut(self.gradovi)
 
     def ukrsti(self, partner):
         

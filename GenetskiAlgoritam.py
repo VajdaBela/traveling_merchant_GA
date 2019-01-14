@@ -34,17 +34,31 @@ def izaberiRoditelja(roditelji):
         roditelji-lista mogucih kandidata da budu roditelji
     output:
         roditelj-izabrani roditelj"""
-    fitnesZbir = 0
-    for roditelj in roditelji:
-        fitnesZbir += roditelj.getFitnes()
 
-    r = random.random()
+    # fitnesZbir = 0
+    # for roditelj in roditelji:
+    #     fitnesZbir += roditelj.getFitnes()
+    #
+    # r = random.random()
+    #
+    # for roditelj in roditelji:
+    #     r -= roditelj.getFitnes() / fitnesZbir
+    #     if r <= 0:
+    #         return roditelj
+    # return roditelji[-1]
 
-    for roditelj in roditelji:
-        r -= roditelj.getFitnes() / fitnesZbir
-        if r <= 0:
-            return roditelj
-    return roditelji[-1]
+    n = len(roditelji)
+    d = []
+    for i in range(6):
+        d.append(roditelji[random.randint(0,n-1)])
+
+    for i in range(2):
+        for j in range(i,len(d)):
+            if d[j].getFitnes() > d[i].getFitnes():
+                d[j], d[i] = d[i], d[j]
+
+    return (d[j], d[i])
+
 
 #Todo istestirati
 def nadji(populacija, tip="najgori"):
@@ -79,16 +93,17 @@ def GA(roditelji, brIteracija):
     while i < brIteracija:
         deca = []
         for n in range(brPopulacije//2):
-            otac = izaberiRoditelja(roditelji)
-            majka = izaberiRoditelja(roditelji)
+            otac ,majka = izaberiRoditelja(roditelji)
             (dete1,dete2) = otac.ukrsti(majka)
-            dete1.mutiraj(i,brIteracija)
-            dete2.mutiraj(i,brIteracija)
+            if(random.random() < 0.1):
+                dete1.mutiraj(i,brIteracija)
+                dete2.mutiraj(i,brIteracija)
             deca.append(dete1)
             deca.append(dete2)
         najboljiRoditeljIdx = nadji(roditelji, "najbolji")
         najgoreDeteIdx = nadji(deca)
         deca[najgoreDeteIdx] = roditelji[najboljiRoditeljIdx]
+        #print(i,roditelji[najboljiRoditeljIdx].duzinaPuta)
         roditelji = deca
 
         i += 1
