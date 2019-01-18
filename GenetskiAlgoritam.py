@@ -49,15 +49,21 @@ def izaberiRoditelja(roditelji):
 
     n = len(roditelji)
     d = []
-    for i in range(6):
-        d.append(roditelji[random.randint(0,n-1)])
+    izabrani = []
+    for i in range(n//5):
+        while True:
+            l = random.randint(0, n-1)
+            if l not in izabrani:
+                izabrani.append(l)
+                break
+        d.append(roditelji[l])
 
     for i in range(2):
-        for j in range(i,len(d)):
+        for j in range(i+1,len(d)):
             if d[j].getFitnes() > d[i].getFitnes():
                 d[j], d[i] = d[i], d[j]
 
-    return (d[j], d[i])
+    return (d[0], d[j]) #bela greska
 
 
 #Todo istestirati
@@ -80,6 +86,10 @@ def nadji(populacija, tip="najgori"):
                 najgoriIdx = i
         return najgoriIdx
 
+#za brisanje
+def foo(p):
+    return p.duzinaPuta
+
 def GA(roditelji, brIteracija):
     """Genetski algoritam
     input:
@@ -87,6 +97,13 @@ def GA(roditelji, brIteracija):
         brIteracija-broj generacija koje ce se generisati
     output:
         najbolji-najbolja pronadjena jedinka"""
+
+    # #bela
+    # roditelji.sort(key=foo)
+    # fi = open("test.txt","w")
+    # for d in roditelji:
+    #     fi.write(str(d) + "\n")
+
     brPopulacije = len(roditelji)
 
     i = 0
@@ -94,8 +111,15 @@ def GA(roditelji, brIteracija):
         deca = []
         for n in range(brPopulacije//2):
             otac ,majka = izaberiRoditelja(roditelji)
+
             (dete1,dete2) = otac.ukrsti(majka)
-            if(random.random() < 0.1):
+            # #bela
+            # fi.write("o: " + str(otac) + "\n")
+            # fi.write("m: " + str(majka) + "\n")
+            # fi.write("dete1: " + str(dete1) + "\n")
+            # fi.write("dete2: " + str(dete2) + "\n")
+
+            if(random.random() < 0.3):
                 dete1.mutiraj(i,brIteracija)
                 dete2.mutiraj(i,brIteracija)
             deca.append(dete1)
@@ -103,9 +127,14 @@ def GA(roditelji, brIteracija):
         najboljiRoditeljIdx = nadji(roditelji, "najbolji")
         najgoreDeteIdx = nadji(deca)
         deca[najgoreDeteIdx] = roditelji[najboljiRoditeljIdx]
-        #print(i,roditelji[najboljiRoditeljIdx].duzinaPuta)
-        roditelji = deca
+        # #bela
+        # deca.sort(key=foo)
+        print(i,roditelji[najboljiRoditeljIdx].duzinaPuta)
+        # fi.write(str(i) + "\n")
+        # for d in deca:
+        #     fi.write(str(d) + "\n")
 
+        roditelji = deca
         i += 1
 
     return roditelji[nadji(roditelji, "najbolji")]
