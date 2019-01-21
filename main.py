@@ -2,23 +2,20 @@ from Grad import *
 from  Put import *
 from GenetskiAlgoritam import *
 
-def proveri(p):
-    for i in sviGradovi.values():
-        if i not in p.gradovi:
-            return False
-    return True
+fileName = "data_tsp.txt"
+br_populacija = 100
+br_iteracija = 10000
 
 
-
-file = open("data_tsp.txt", "r")
+file = open(fileName, "r")
 Grad.ucitaljIzFile(file, sviGradovi)
 file.close()
 
 putevi = []
-for i in range(100):
+for i in range(br_populacija):
     putevi.append(Put.randPut(list(sviGradovi.values())))
 
-m = GA(putevi, 10000)
+m = GA(putevi, br_iteracija)
 
 print(m.duzinaPuta)
 

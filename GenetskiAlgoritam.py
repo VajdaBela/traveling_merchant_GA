@@ -1,9 +1,12 @@
 import random
 
+sansa_mutiranja = 0.1
+jacinaTurnamenta = 5
+
 class Evoluitivni:
     """interface za sve klase koji zele da koriste GA"""
     def mutiraj(self, curentIter, allIter):
-        """koristi se za mutiranje jedinku
+        """koristi se za mutiranje jedinke
         input:
             self
         output:
@@ -35,22 +38,10 @@ def izaberiRoditelja(roditelji):
     output:
         roditelj-izabrani roditelj"""
 
-    # fitnesZbir = 0
-    # for roditelj in roditelji:
-    #     fitnesZbir += roditelj.getFitnes()
-    #
-    # r = random.random()
-    #
-    # for roditelj in roditelji:
-    #     r -= roditelj.getFitnes() / fitnesZbir
-    #     if r <= 0:
-    #         return roditelj
-    # return roditelji[-1]
-
     n = len(roditelji)
     d = []
     izabrani = []
-    for i in range(n//5):
+    for i in range(n//jacinaTurnamenta):
         while True:
             l = random.randint(0, n-1)
             if l not in izabrani:
@@ -63,10 +54,8 @@ def izaberiRoditelja(roditelji):
             if d[j].getFitnes() > d[i].getFitnes():
                 d[j], d[i] = d[i], d[j]
 
-    return (d[0], d[j]) #bela greska
+    return (d[0], d[1])
 
-
-#Todo istestirati
 def nadji(populacija, tip="najgori"):
     """pronalazi najgori ili najbolji u populaciji
     input:
@@ -86,10 +75,6 @@ def nadji(populacija, tip="najgori"):
                 najgoriIdx = i
         return najgoriIdx
 
-#za brisanje
-def foo(p):
-    return p.duzinaPuta
-
 def GA(roditelji, brIteracija):
     """Genetski algoritam
     input:
@@ -98,28 +83,14 @@ def GA(roditelji, brIteracija):
     output:
         najbolji-najbolja pronadjena jedinka"""
 
-    # #bela
-    # roditelji.sort(key=foo)
-    # fi = open("test.txt","w")
-    # for d in roditelji:
-    #     fi.write(str(d) + "\n")
-
     brPopulacije = len(roditelji)
-
     i = 0
     while i < brIteracija:
         deca = []
         for n in range(brPopulacije//2):
             otac ,majka = izaberiRoditelja(roditelji)
-
             (dete1,dete2) = otac.ukrsti(majka)
-            # #bela
-            # fi.write("o: " + str(otac) + "\n")
-            # fi.write("m: " + str(majka) + "\n")
-            # fi.write("dete1: " + str(dete1) + "\n")
-            # fi.write("dete2: " + str(dete2) + "\n")
-
-            if(random.random() < 0.3):
+            if(random.random() < sansa_mutiranja):
                 dete1.mutiraj(i,brIteracija)
                 dete2.mutiraj(i,brIteracija)
             deca.append(dete1)
@@ -127,13 +98,7 @@ def GA(roditelji, brIteracija):
         najboljiRoditeljIdx = nadji(roditelji, "najbolji")
         najgoreDeteIdx = nadji(deca)
         deca[najgoreDeteIdx] = roditelji[najboljiRoditeljIdx]
-        # #bela
-        # deca.sort(key=foo)
         print(i,roditelji[najboljiRoditeljIdx].duzinaPuta)
-        # fi.write(str(i) + "\n")
-        # for d in deca:
-        #     fi.write(str(d) + "\n")
-
         roditelji = deca
         i += 1
 
