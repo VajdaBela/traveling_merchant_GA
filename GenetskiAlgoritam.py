@@ -83,5 +83,5 @@ def GA(roditelji, brIteracija):
         roditelji = deca
         i += 1
 
-    return roditelji[nadji(roditelji, "najbolji")]
+    return max(roditelji, key=lambda x : x.getFitnes())
 
