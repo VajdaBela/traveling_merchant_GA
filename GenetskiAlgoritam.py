@@ -56,25 +56,6 @@ def izaberiRoditelja(roditelji):
 
     return (d[0], d[1])
 
-def nadji(populacija, tip="najgori"):
-    """pronalazi najgori ili najbolji u populaciji
-    input:
-        populacija-populacija u kom se trazi
-        tip-da trazi najgorag ili najboljeg
-    output:
-        najgoriIdx-index na kom se nalazi trazena jedinka"""
-    najgoriIdx = 0
-    if tip == "najgori":
-        for i in range(len(populacija)):
-            if populacija[i].getFitnes() < populacija[najgoriIdx].getFitnes():
-                najgoriIdx = i
-        return najgoriIdx
-    else:
-        for i in range(len(populacija)):
-            if populacija[i].getFitnes() > populacija[najgoriIdx].getFitnes():
-                najgoriIdx = i
-        return najgoriIdx
-
 def GA(roditelji, brIteracija):
     """Genetski algoritam
     input:
@@ -88,17 +69,17 @@ def GA(roditelji, brIteracija):
     while i < brIteracija:
         deca = []
         for n in range(brPopulacije//2):
-            otac ,majka = izaberiRoditelja(roditelji)
-            (dete1,dete2) = otac.ukrsti(majka)
+            otac, majka = izaberiRoditelja(roditelji)
+            dete1, dete2 = otac.ukrsti(majka)
             if(random.random() < sansa_mutiranja):
                 dete1.mutiraj(i,brIteracija)
                 dete2.mutiraj(i,brIteracija)
             deca.append(dete1)
             deca.append(dete2)
-        najboljiRoditeljIdx = nadji(roditelji, "najbolji")
-        najgoreDeteIdx = nadji(deca)
-        deca[najgoreDeteIdx] = roditelji[najboljiRoditeljIdx]
-        print(i,roditelji[najboljiRoditeljIdx].duzinaPuta)
+        najboljiRoditelj = max(roditelji, key=lambda x : x.getFitnes())
+        najgoreDeteIdx = min(range(len(deca)), key=lambda x : deca[x].getFitnes())
+        deca[najgoreDeteIdx] = najboljiRoditelj
+        print(i,najboljiRoditelj.duzinaPuta)
         roditelji = deca
         i += 1
 
