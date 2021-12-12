@@ -3,7 +3,10 @@ from  Road import *
 from GeneticAlgorithm import *
 import sys
 
-fileName = "data_tsp.txt"
+if not len(sys.argv) == 2 :
+    print("Usage: python main.py <file>")
+    sys.exit(1)
+fileName = sys.argv[1]
 populationNum = 100
 iterationNum = 10000
 
