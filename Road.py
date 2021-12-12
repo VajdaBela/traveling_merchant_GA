@@ -88,6 +88,12 @@ class Road(Evolvable):
 
         return (Road(child1), Road(child2))
 
+    def printInfo(self):
+        """
+        see Evolvable
+        """
+        print(self.roadDistance)
+
     def getFitness(self):
         """
         see Evolvabel

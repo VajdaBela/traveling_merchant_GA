@@ -25,6 +25,9 @@ class Tacka(Evolvable):
         yo = (self.y + partner.y*l)/(1 + l)
         return (Tacka(xo, yo), Tacka(partner.x - xo, partner.y - yo))
 
+    def printInfo(self):
+        print(self)
+
     def mutate(self, currentIter, allIter):
         if random() > 0.5:
             self.x + random()

@@ -3,7 +3,6 @@ import random
 mutateChance = 0.1
 tournamentStrength = 5
 
-#TODO add print info to interface
 class Evolvable:
     """
     interface class for the GA algorithm
@@ -42,6 +41,16 @@ class Evolvable:
             real number, its meaning is the individuals' strength.
         """
         raise NotImplementedError(self.__class__ + ": getFitness is not implemented")
+    
+    def printInfo(self):
+        """
+        used to print status of genetic algorithm
+        input:
+            self
+        output:
+            NA
+        """
+        raise NotImplementedError(self.__class__ + ": printInfo is not implemented")
 
 
 def chooseParents(individuals):
@@ -94,7 +103,8 @@ def GA(parents, numOfIter):
         worstChildIdx = min(range(len(children)), key=lambda x : children[x].getFitness())
         children[worstChildIdx] = bestParent
 
-        print(i,bestParent.roadDistance)
+        print(str(i) + " ", end="")
+        bestParent.printInfo()
 
         #advance population
         parents = children
