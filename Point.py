@@ -1,4 +1,4 @@
-from GenetskiAlgoritam import Evolvable, GA
+from GeneticAlgorithm import Evolvable, GA
 from random import random, randint
 import math
 

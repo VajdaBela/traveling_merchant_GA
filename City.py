@@ -1,4 +1,4 @@
-class Grad:
+class City:
     """
     this class represents a city
     attributes:
@@ -44,7 +44,7 @@ class Grad:
             NA
         """
         for line in file:
-            city = Grad(line)
+            city = City(line)
             storage[city.name] = city
 
 
@@ -52,7 +52,7 @@ class Grad:
 if __name__ == '__main__':
     cityList = {}
     f = open("data_tsp.txt", 'r')
-    Grad.readFromFile(f, cityList)
+    City.readFromFile(f, cityList)
     print(cityList["1"])
     print(cityList["2"])
     print(cityList["1"].distance(cityList["2"]))

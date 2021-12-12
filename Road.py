@@ -1,8 +1,8 @@
-from GenetskiAlgoritam import Evolvable
+from GeneticAlgorithm import Evolvable
 from random import shuffle, random, randint
 
 
-class Put(Evolvable):
+class Road(Evolvable):
     """
     this class represents the road of a salesperson
     attributes:
@@ -12,7 +12,7 @@ class Put(Evolvable):
     def __init__(self, cities):
         self.cities = cities.copy()
         self.cities.append(self.cities[0])
-        self.roadDistance = Put.calculateDistance(self.cities)
+        self.roadDistance = Road.calculateDistance(self.cities)
 
     def mutate(self, currentIter, allIter):
         """
@@ -37,7 +37,7 @@ class Put(Evolvable):
 
         newRoad.append(newRoad[0]) #make road a circle again
         self.cities = newRoad
-        self.roadDistance = Put.calculateDistance(self.cities) #recalculate length of road
+        self.roadDistance = Road.calculateDistance(self.cities) #recalculate length of road
 
 
     def crossbreed(self, partner):
@@ -86,7 +86,7 @@ class Put(Evolvable):
         self.cities.append(self.cities[0])
         partner.cities.append(partner.cities[0])
 
-        return (Put(child1), Put(child2))
+        return (Road(child1), Road(child2))
 
     def getFitness(self):
         """
@@ -102,7 +102,7 @@ class Put(Evolvable):
         return s
 
     @staticmethod
-    def randPut(cities):
+    def randRoad(cities):
         """
         makes random road
         input:
@@ -110,9 +110,8 @@ class Put(Evolvable):
         output:
             random road
         """
-        #TODO say type of raod
         shuffle(cities)
-        return Put(cities)
+        return Road(cities)
 
     @staticmethod
     def calculateDistance(cities):

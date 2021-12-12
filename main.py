@@ -1,6 +1,6 @@
-from Grad import *
-from  Put import *
-from GenetskiAlgoritam import *
+from City import *
+from  Road import *
+from GeneticAlgorithm import *
 import sys
 
 fileName = "data_tsp.txt"
@@ -10,12 +10,12 @@ iterationNum = 10000
 
 cities = {}
 file = open(fileName, "r")
-Grad.readFromFile(file, cities)
+City.readFromFile(file, cities)
 file.close()
 
 roads = []
 for i in range(populationNum):
-    roads.append(Put.randPut(list(cities.values())))
+    roads.append(Road.randRoad(list(cities.values())))
 
 bestRoad = GA(roads, iterationNum)
 
