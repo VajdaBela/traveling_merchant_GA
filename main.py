@@ -1,26 +1,28 @@
 from Grad import *
 from  Put import *
 from GenetskiAlgoritam import *
+import sys
 
 fileName = "data_tsp.txt"
-br_populacija = 100
-br_iteracija = 10000
+populationNum = 100
+iterationNum = 10000
 
 
+cities = {}
 file = open(fileName, "r")
-Grad.ucitaljIzFile(file, sviGradovi)
+Grad.readFromFile(file, cities)
 file.close()
 
-putevi = []
-for i in range(br_populacija):
-    putevi.append(Put.randPut(list(sviGradovi.values())))
+roads = []
+for i in range(populationNum):
+    roads.append(Put.randPut(list(cities.values())))
 
-m = GA(putevi, br_iteracija)
+bestRoad = GA(roads, iterationNum)
 
-print(m.duzinaPuta)
+print(bestRoad.roadDistance)
 
-for g in m.gradovi:
-    print(g)
+for city in bestRoad.cities:
+    print(city)
 
 print()
 

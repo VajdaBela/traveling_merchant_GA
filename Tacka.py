@@ -1,32 +1,31 @@
-from GenetskiAlgoritam import *
+from GenetskiAlgoritam import Evolvable, GA
 from random import random, randint
+import math
 
-class Tacka(Evoluitivni):
+#class for testing. Implemented more easily than Put
+class Tacka(Evolvable):
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
         if x == 0 and y == 0:
-            self.savrsenstvo = 1000000000000000000
+            self.fitness = math.inf
         else:
-            self.savrsenstvo = abs(1/(x**2 + y**2)**0.5)
+            self.fitness = 1/math.sqrt(x**2 + y**2)
 
     def __str__(self):
         return "x = " + str(self.x) + "y = " + str(self.y)
 
-    def udaljenost(self, drugi):
-        return ((self.x - drugi.x)**2 + (self.y - drugi.y)**2)**0.5
+    def getFitness(self):
+        return self.fitness
 
-    def getFitnes(self):
-        return self.savrsenstvo
-
-    def ukrsti(self, partner):
+    def crossbreed(self, partner):
         l = random()
         xo = (self.x + partner.x*l)/(1 + l)
         yo = (self.y + partner.y*l)/(1 + l)
         return (Tacka(xo, yo), Tacka(partner.x - xo, partner.y - yo))
 
-    def mutiraj(self):
+    def mutate(self, currentIter, allIter):
         if random() > 0.5:
             self.x + random()
             self.y + random()
@@ -35,9 +34,9 @@ class Tacka(Evoluitivni):
             self.y - random()
 
 if __name__ == "__main__":
-    tacke = []
+    points = []
     for i in range(10):
-        tacke.append(Tacka(randint(-100,100),randint(-100,100)))
+        points.append(Tacka(randint(-100,100),randint(-100,100)))
 
-    t = GA(tacke, 100)
+    t = GA(points, 100)
     print(t.x, t.y)

@@ -1,49 +1,58 @@
 class Grad:
-    """klassa reprezent grada
-    atributi:
-        ime-ime grada
-        x-x kordinata
-        y-y kordinata"""
-    def __init__(self, linija):
-        tokeni = linija.split(" ")
-        self.ime = tokeni[0]
-        self.x = float(tokeni[1])
-        self.y = float(tokeni[2])
+    """
+    this class represents a city
+    attributes:
+        name - name of city
+        x - x coordinate
+        y - y coordinate
+    """
+    def __init__(self, line):
+        tokens = line.split(" ")
+        self.name = tokens[0]
+        self.x = float(tokens[1])
+        self.y = float(tokens[2])
 
-    def udaljenost(self, other):
-        """koristi se za izracunavanje udaljenosti izmedju dva grada
+    def distance(self, other):
+        """
+        calculates the distance between two cities
         input:
             self
-            other-drugi grad
+            other - the other city
         output:
-            daljina-udaljenost izemdju dva grada"""
+            distance between self and the other city
+        """
         return ((self.x - other.x)**2 + (self.y - other.y)**2) ** 0.5
 
     def __str__(self):
-        """koristi se za stringovsku reprezentaciju grada
+        """
+        string representation of a city
         input:
             self
         output:
-            str-string reprezentacija grada"""
-        return "ime = " + str(self.ime) + " x = " + str(self.x) + " y = " + str(self.y)
+            string representing the city
+        """
+        return "name = " + str(self.name) + " x = " + str(self.x) + " y = " + str(self.y)
 
     @staticmethod
-    def ucitaljIzFile(file, storage):
-        """koristi se za ucitavanje svih gradova iz fajla
+    def readFromFile(file, storage):
+        """
+        used to read in cities from file
         input:
-            file-file iz koga da se ucita
-            storage-variabla u koju da se ucita
+            file - file from which to read
+            storage - space into which cities are read
         output:
-            none"""
-        for linija in file:
-            tacka = Grad(linija)
-            storage[tacka.ime] = tacka
+            NA
+        """
+        for line in file:
+            city = Grad(line)
+            storage[city.name] = city
 
 
+#code for testing
 if __name__ == '__main__':
-    ListaGradova = {}
+    cityList = {}
     f = open("data_tsp.txt", 'r')
-    Grad.ucitaljIzFile(f, ListaGradova)
-    print(ListaGradova["1"])
-    print(ListaGradova["2"])
-    print(ListaGradova["1"].udaljenost(ListaGradova["2"]))
+    Grad.readFromFile(f, cityList)
+    print(cityList["1"])
+    print(cityList["2"])
+    print(cityList["1"].distance(cityList["2"]))

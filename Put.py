@@ -1,127 +1,132 @@
-from GenetskiAlgoritam import Evoluitivni
+from GenetskiAlgoritam import Evolvable
 from random import shuffle, random, randint
 
-sviGradovi = {}
 
-class Put(Evoluitivni):
-    """klassa reprezentuje put prodavca
-    atributi:
-        gradovi-redosled gradova kako se posecaju
-        duzinaPuta-duzina izabranog puta"""
-    def __init__(self, gradovi):
-        self.gradovi = gradovi.copy()
-        self.gradovi.append(self.gradovi[0])
-        self.duzinaPuta = Put.izracunajPut(self.gradovi)
+class Put(Evolvable):
+    """
+    this class represents the road of a salesperson
+    attributes:
+        cities - the order in which the cities should be visited
+        roadDistance - distance of the current road
+    """
+    def __init__(self, cities):
+        self.cities = cities.copy()
+        self.cities.append(self.cities[0])
+        self.roadDistance = Put.calculateDistance(self.cities)
 
-    def mutiraj(self, curentIter, allIter):
-        # Koeficient na osnovu koga odlucujemo sta zelimo dalje da radimo
-        koeficient = curentIter / allIter
+    def mutate(self, currentIter, allIter):
+        """
+        see Evolvable
+        """
+        #reshuffleNum number of cities will be reshuffled
+        #atmost 10 will be reshufled, this happens in the beginning of GA
+        #atminimum 2 will be reshufled, this happens as the GA is nearing the end 
+        reshuffleNum = int(10 - 8 * currentIter / allIter)
 
-        gradoviNova = self.gradovi[1:len(self.gradovi) - 1]
-        # pola = len(gradoviNova)/2
+        #last city is removed because it is the same as the first one
+        self.cities.pop()
 
-        # Sta ti se vise svidja?
+        #reshuufling by taking a city from the end, and then from the beginning
+        newRoad = []
+        for i in range(reshuffleNum):
+            newRoad.append(self.cities[-i-1])
+            newRoad.append(self.cities[i])
 
-        # Nacin 1:Ovde dolazi malo do varijacija-funkcija nije linearna
-        # mod = int(10 - 8*koeficient)
-        # n = pola % mod
+        #add remaining cities
+        newRoad.extend(self.cities[reshuffleNum:-reshuffleNum])
 
-        # Nacin 2 :Linearna funkcija
-        n = int(10 - 8 * koeficient)
-
-        gradoviMutirana = []
-        brojac = 0
-        # Prvo ubacujem elemenat sa kraja,pa elem. sa pocetka...i tako u nekoliko iteracija u odnosu na koeficient.
-        for i in range(n):
-            gradoviMutirana.append(gradoviNova[len(gradoviNova) - 1 - i])
-            gradoviMutirana.append(gradoviNova[i])
-            brojac += 1  # bela brojac je uvek jednak sa n ovde
-        # Zatim srednji deo liste koji nisam pipao,ubacujem na kraj liste,jedan po jedan
-        for j in range(brojac, len(gradoviNova) - brojac):
-            gradoviMutirana.append(gradoviNova[j])
-
-        gradoviMutirana.append(self.gradovi[0])  # dodaj na kraj grad koji si izbacio
-        gradoviMutirana.insert(0, self.gradovi[0])  # Dodaj na pocetak grad koji si izbacio
-        self.gradovi = gradoviMutirana  # Postavi gradove na nove
-
-        self.duzinaPuta = Put.izracunajPut(self.gradovi)
-
-    def ukrsti(self, partner):
-        del(self.gradovi[-1])
-        del(partner.gradovi[-1])
-        l = len(self.gradovi)
-        dete1 = [None] * l
-        dete2 = [None] * l
+        newRoad.append(newRoad[0]) #make road a circle again
+        self.cities = newRoad
+        self.roadDistance = Put.calculateDistance(self.cities) #recalculate length of road
 
 
-        begining = 0
+    def crossbreed(self, partner):
+        """
+        To make the first child first take out the middle of self, and pad out the sides from partner.
+        Inverse is true for the second child
+        see Evovable
+        """
+        #remove repeated city
+        self.cities.pop()
+        partner.cities.pop()
+        roadLen = len(self.cities)
+        child1 = [None] * roadLen
+        child2 = [None] * roadLen
+
+        #get beginning and end idx of middle
+        beginning = 0
         ending = 0
-        while begining == ending:
-            begining = randint(0,l-1)
-            ending = randint(0,l-1)
-        if(begining > ending):
-            begining, ending = ending, begining
+        while beginning == ending:
+            beginning = randint(0,roadLen-1)
+            ending = randint(0,roadLen-1)
+        if(beginning > ending):
+            beginning, ending = ending, beginning
 
-        midle1 = self.gradovi[begining:ending]
-        midle2 = partner.gradovi[begining:ending]
+        #get middle of partner and self
+        selfMidle = self.cities[beginning:ending]
+        partnerMidle = partner.cities[beginning:ending]
 
-        dete1[begining:ending] = midle1
-        dete2[begining:ending] = midle2
+        child1[beginning:ending] = selfMidle
+        child2[beginning:ending] = partnerMidle
 
-        i1 = ending
-        idx = 0
-        while i1 != begining:
-            if partner.gradovi[idx] not in midle1:
-                dete1[i1] = partner.gradovi[idx]
-                i1 += 1
-                i1 %= l
-            idx += 1
+        #child cities are added from ending, loops around to beginning and continues to beginning
+        child1Idx = ending
+        child2Idx = ending
+        for parentIdx in range(0, roadLen):
+            if partner.cities[parentIdx] not in selfMidle:
+                child1[child1Idx] = partner.cities[parentIdx]
+                child1Idx += 1
+                child1Idx %= roadLen
+            if self.cities[parentIdx] not in partnerMidle:
+                child2[child2Idx] = self.cities[parentIdx]
+                child2Idx += 1
+                child2Idx %= roadLen
 
+        #return removed cities
+        self.cities.append(self.cities[0])
+        partner.cities.append(partner.cities[0])
 
-        i2 = ending
-        idx = 0
-        while i2 != begining:
-            if self.gradovi[idx] not in midle2:
-                dete2[i2] = self.gradovi[idx]
-                i2 += 1
-                i2 %= l
-            idx += 1
+        return (Put(child1), Put(child2))
 
-        self.gradovi.append(self.gradovi[0])
-        partner.gradovi.append(partner.gradovi[0])
-        return (Put(dete1), Put(dete2))
-
-    def getFitnes(self):
-        return 1/self.duzinaPuta
+    def getFitness(self):
+        """
+        see Evolvabel
+        """
+        return 1/self.roadDistance
 
     def __str__(self):
         s = ""
-        for i in self.gradovi:
-            s += " " + i.ime
-        s += " " + str(self.duzinaPuta)
+        for i in self.cities:
+            s += " " + i.name
+        s += " " + str(self.roadDistance)
         return s
 
     @staticmethod
-    def randPut(gradovi):
-        """vraca nasumicno izabran put
+    def randPut(cities):
+        """
+        makes random road
         input:
-            gradovi-gradovi da se zaobidju
+            cities - cities to be visited
         output:
-            Put-jedan nasumican put"""
-        shuffle(gradovi)
-        return Put(gradovi)
+            random road
+        """
+        #TODO say type of raod
+        shuffle(cities)
+        return Put(cities)
 
     @staticmethod
-    def izracunajPut(nizGradova):
-        """koristi se za izracunavanje duzine puta od niza gradova
+    def calculateDistance(cities):
+        """
+        used for calculating the distance of a road
         input:
-            nizGradova-lista gradova od koji reprezentuje put prodavca
+            cities - list of cities that need to be visited
         output:
-            zbir-duzina puta"""
-        zbir = 0
-        for i in range(len(nizGradova) - 1):
-            zbir += nizGradova[i].udaljenost(nizGradova[i+1])
-        return zbir
+            number representing the distance of the road
+        """
+        distanceSum = 0
+        for i in range(len(cities) - 1):
+            distanceSum += cities[i].distance(cities[i+1])
+        return distanceSum
 
 if __name__ == "__main__":
     pass
